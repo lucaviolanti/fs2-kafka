@@ -1,22 +1,17 @@
-val catsEffectVersion = "3.3.14"
-
+val catsEffectVersion = "3.4.1"
 val confluentVersion = "6.2.7"
-
-val fs2Version = "3.2.14"
-
+val disciplineScalatestVersion = "2.2.0"
+val fs2Version = "3.4.0"
 val kafkaVersion = "2.8.2"
-
-val testcontainersScalaVersion = "0.40.11"
-
-val vulcanVersion = "1.8.3"
-
+val kindProjectorVersion = "0.13.2"
+val logbackClassicVersion = "1.4.4"
 val munitVersion = "0.7.29"
+val testcontainersScalaVersion = "0.40.11"
+val vulcanVersion = "1.8.4"
 
-val scala212 = "2.12.16"
-
-val scala213 = "2.13.8"
-
-val scala3 = "3.2.1"
+val scala212 = "2.12.17"
+val scala213 = "2.13.10"
+val scala3 = "3.3.1"
 
 ThisBuild / tlBaseVersion := "2.5"
 
@@ -105,20 +100,21 @@ lazy val dependencySettings = Seq(
   libraryDependencies ++= Seq(
     "com.dimafeng" %% "testcontainers-scala-scalatest" % testcontainersScalaVersion,
     "com.dimafeng" %% "testcontainers-scala-kafka" % testcontainersScalaVersion,
-    "org.typelevel" %% "discipline-scalatest" % "2.2.0",
+    "org.typelevel" %% "discipline-scalatest" % disciplineScalatestVersion,
     "org.typelevel" %% "cats-effect-laws" % catsEffectVersion,
     "org.typelevel" %% "cats-effect-testkit" % catsEffectVersion,
-    "ch.qos.logback" % "logback-classic" % "1.2.11"
+    "ch.qos.logback" % "logback-classic" % logbackClassicVersion
   ).map(_ % Test),
   libraryDependencies ++= {
     if (scalaVersion.value.startsWith("3")) Nil
-    else
+    else {
       Seq(
         compilerPlugin(
-          ("org.typelevel" %% "kind-projector" % "0.13.2")
+          ("org.typelevel" %% "kind-projector" % kindProjectorVersion)
             .cross(CrossVersion.full)
         )
       )
+    }
   },
   pomPostProcess := { (node: xml.Node) =>
     new xml.transform.RuleTransformer(new xml.transform.RewriteRule {
